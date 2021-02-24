@@ -1,0 +1,49 @@
+import MessageIcon from '@material-ui/icons/Message';
+import InboxIcon from '@material-ui/icons/Inbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import PeopleIcon from '@material-ui/icons/People';
+import AppsIcon from '@material-ui/icons/Apps';
+
+export const sidebarItemsData = [
+  {
+    icon: <MessageIcon/>,
+    text: "Thread",
+  },
+  {
+    icon: <InboxIcon/>,
+    text: "All DMs",
+  },
+  {
+    icon: <DraftsIcon/>,
+    text: "Mentions & reaction",
+  },
+  {
+    icon: <BookmarkBorderIcon/>,
+    text: "Save Items",
+  },
+  {
+    icon: <PeopleIcon/>,
+    text: "Peoples & Groups",
+  },
+  {
+    icon: <AppsIcon/>,
+    text: "more",
+  },
+]
+
+export const sidebarChannelsData = [
+  {
+    name: "channel 1",
+    description: "Channel 1 Description",
+  },
+  {
+    name: "channel 2",
+    description: "Channel 2 Description",
+  },
+  {
+    name: "claver",
+    description: "Company-wide announcements and work-based matters",
+  },
+
+]
