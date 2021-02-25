@@ -13,10 +13,8 @@ function Login(props) {
       }
       localStorage.setItem('user', JSON.stringify(newUser))
       props.setUser(newUser)
-      console.log(result.user)
     })
     .catch((error) =>{
-      console.log(error.message)
     })
   }
   return (

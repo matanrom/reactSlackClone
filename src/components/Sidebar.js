@@ -14,12 +14,10 @@ function Sidebar(props) {
   const history = useHistory()
   const goToChannel = (id) =>{
     if(id){
-      console.log(id)
       history.push(`/room/${id}`)
     }
   }
 
-    // console.log(props)
     const darkTheme = useTheme()
   
     const themeStyle = {
@@ -28,7 +26,6 @@ function Sidebar(props) {
 
   const addChannel = () => {
     const promptName = prompt('enter channel name')
-    console.log(promptName)
     if(promptName){
       db.collection('rooms').add({
         name: promptName

@@ -64,7 +64,6 @@ function Chat({user}) {
         timestamp: firebase.firestore.Timestamp.now(),
       }
       db.collection('rooms').doc(channelId).collection('messages').add(payload)
-      console.log(payload)
     }
   }
 
@@ -86,7 +85,7 @@ function Chat({user}) {
         {
         messages?.length > 0 &&
         messages.map((data, index) =>(
-          <Message>
+          <Message key={index}>
             <ChatMessage
               text={data.text}
               name={data.user}

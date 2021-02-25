@@ -25,11 +25,9 @@ function App() {
     }
 
     getChannels()
-    // console.log(rooms)
 
     return () => {
       getChannels()
-      // console.log('cleanup')
     }
   }, [])
 
@@ -39,9 +37,6 @@ function App() {
       setUser(null)
     })
   }
-
-  console.log('user state: ', user)
-  // console.log(rooms)
 
   return (
     <div className="app">
