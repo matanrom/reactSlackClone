@@ -1,62 +1,102 @@
-import React, {useState, useEffect} from "react";
-import styled from "styled-components";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import {sidebarChannelsData} from "../data/SidebarData";
-import {useTheme, useThemeUpdate} from '../ThemeContext'
+import React, {useState, useEffect} from "react"
+import styled from "styled-components"
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
+import {sidebarChannelsData} from "../data/SidebarData"
+import {useTheme, useThemeUpdate} from "../ThemeContext"
+import ChatInput from './ChatInput'
+import ChatMessage from './ChatMessage'
 
 function Chat() {
-
   const darkTheme = useTheme()
-  const toggleTheme = useThemeUpdate()
 
   const themeStyle = {
-    backgroundColor: darkTheme? 'white' : 'rgb(39 45 59)',
-    color: darkTheme? 'black' : 'white'
+    backgroundColor: darkTheme ? "#d3d3d347" : "rgb(39 45 59)",
+    color: darkTheme ? "black" : "#e5e1e1",
+  }
+
+  const messageHover = {
+    backgroundColor: darkTheme ? "red" : "yellow",
   }
 
   return (
-    <ChatContainer style={themeStyle}>
-        <ChatHeader>
-          <ChatHeaderChannel>
-            <strong>claver</strong>
-            <p>Company-wide announcements and work-based matters</p>
-          </ChatHeaderChannel>
-          <ChatHeaderDetails>
-            <p>Details</p>
-            <ErrorOutlineIcon />
-          </ChatHeaderDetails>
-        </ChatHeader>
-        </ChatContainer>
-      
-  );
+    <Container style={themeStyle}>
+      <Header>
+        <Channel>
+          <ChannelName>claver</ChannelName>
+          <ChannelInfo style={themeStyle}>
+            Company-wide announcements and work-based matters
+          </ChannelInfo>
+        </Channel>
+        <ChannelDetails style={themeStyle}>
+          <div>Details</div>
+          <Info />
+        </ChannelDetails>
+      </Header>
+      <MaessageContainer>
+        <Message>
+          <ChatMessage/>
+        </Message>
+        <Message>
+          <ChatMessage/>
+        </Message>
+      </MaessageContainer>
+      <ChatInput/>
+    </Container>
+  )
 }
 
-export default Chat;
+export default Chat
 
-const ChatContainer = styled.div`
+const Container = styled.div`
+  display: grid;
+  grid-template-rows: 64px auto min-content;
+`
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 20px;
+  border-bottom: 1px solid rgba(83, 39, 83, 0.13);
+`
+
+const Channel = styled.div`
+  
+`
+
+const ChannelDetails = styled.div`
+  display: flex;
+  align-items: center;
+  color: #606060;
 
 `
 
-const ChatHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0 0 20px;
-`;
+const ChannelName = styled.div`
+  font-weight: 700;
+`
+const ChannelInfo = styled.div`
+  font-weight: 400;
+  color: #606060;
+  font-size: 13px;
+  margin-top: 8px;
+`
 
-const ChatHeaderChannel = styled.div`
+const Info = styled(InfoOutlinedIcon)`
+  margin-left: 10px
+`
+
+const MaessageContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`
 
-  strong {
-    margin-bottom: 10px;
+const Message = styled.div`
+  width:90%;
+  margin-bottom: 20px;
+
+  :hover{
+    background: #e2e1f0;    
   }
-`;
-
-const ChatHeaderDetails = styled.div`
-  display: flex;
-  margin: 0 20px 0 0;
-
-  p {
-    margin-right: 10px;
-  }
-`;
+`

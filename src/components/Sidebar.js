@@ -6,16 +6,26 @@ import AddIcon from '@material-ui/icons/Add';
 import {Link} from "react-router-dom";
 import Header from './Header';
 import {useTheme, useThemeUpdate} from '../ThemeContext'
+import db from "../firebase";
 
-function Sidebar() {
+function Sidebar(props) {
 
-  const darkTheme = useTheme()
-  const toggleTheme = useThemeUpdate()
+    // console.log(props)
+    const darkTheme = useTheme()
+  
+    const themeStyle = {
+      backgroundColor: darkTheme? '#3f0e40' : '#141a26'
+    }
 
-  const themeStyle = {
-    backgroundColor: darkTheme? '#3f0e40' : '#141a26'
+  const addChannel = () => {
+    const promptName = prompt('enter channel name')
+    console.log(promptName)
+    if(promptName){
+      db.collection('rooms').add({
+        name: promptName
+      })
+    }
   }
-
 
   return (
     <Container style={themeStyle}>
@@ -38,12 +48,19 @@ function Sidebar() {
           <div>
             Channels
           </div>
-          <AddIcon/>
+          <AddIcon onClick={addChannel}/>
           
         </NewChannelContainer>
         <ChannelsList>
-          {sidebarChannelsData.map((channel, i) => (
+          {/* {sidebarChannelsData.map((channel, i) => (
               <Channel key={i}>
+                <Link to={`/room/${channel.name}`}>
+                  <p> # {channel.name}</p>
+                </Link>
+              </Channel>
+          ))} */}
+          {props.rooms.map((channel) => (
+              <Channel key={channel.id}>
                 <Link to={`/room/${channel.name}`}>
                   <p> # {channel.name}</p>
                 </Link>
