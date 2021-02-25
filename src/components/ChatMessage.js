@@ -2,7 +2,7 @@ import React from 'react'
 import styled from "styled-components"
 import {useTheme, useThemeUpdate} from "../ThemeContext"
 
-const ChatMessage = () => {
+const ChatMessage = ({text, name, image, timestamp}) => {
 
   const darkTheme = useTheme()
 
@@ -14,15 +14,15 @@ const ChatMessage = () => {
   return (
     <Container style={themeStyle}>
       <UserAvatar>
-        <img src="https://randomuser.me/api/portraits/women/82.jpg" />
+        <img src={image} />
       </UserAvatar>
       <MessageContent>
         <Name>
-          Matan
-          <span style={themeStyle}>12/7/1955</span>
+          {name}
+          <span style={themeStyle}>{new Date(timestamp.toDate()).toUTCString()}</span>
         </Name>
         <Text>
-          Challenge
+          {text}
         </Text>
       </MessageContent>
     </Container>

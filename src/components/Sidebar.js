@@ -7,8 +7,17 @@ import {Link} from "react-router-dom";
 import Header from './Header';
 import {useTheme, useThemeUpdate} from '../ThemeContext'
 import db from "../firebase";
+import {useHistory} from 'react-router-dom'
 
 function Sidebar(props) {
+
+  const history = useHistory()
+  const goToChannel = (id) =>{
+    if(id){
+      console.log(id)
+      history.push(`/room/${id}`)
+    }
+  }
 
     // console.log(props)
     const darkTheme = useTheme()
@@ -60,10 +69,10 @@ function Sidebar(props) {
               </Channel>
           ))} */}
           {props.rooms.map((channel) => (
-              <Channel key={channel.id}>
-                <Link to={`/room/${channel.name}`}>
+              <Channel onClick={() => goToChannel(channel.id)} key={channel.id}>
+                {/* <Link to={`/room/${channel.name}`}> */}
                   <p> # {channel.name}</p>
-                </Link>
+                {/* </Link> */}
               </Channel>
           ))}
         </ChannelsList>

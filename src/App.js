@@ -7,11 +7,12 @@ import styled from "styled-components"
 import Header from "./components/Header"
 import Sidebar from "./components/Sidebar"
 import {ThemeProvider} from "./ThemeContext"
-import db from "./firebase"
+import db, {auth, provider} from "./firebase"
 
 function App() {
   
   const [rooms, setRooms] = useState([])
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
 
   useEffect(() => {
     const getChannels = () => {
@@ -32,26 +33,39 @@ function App() {
     }
   }, [])
 
+  const signOut = () => {
+    auth.signOut().then(() =>{
+      localStorage.removeItem('user')
+      setUser(null)
+    })
+  }
+
+  console.log('user state: ', user)
   // console.log(rooms)
 
   return (
     <div className="app">
       <ThemeProvider>
         <Router>
-          <Container>
-            <Header />
-            <Main>
-              <Sidebar rooms={rooms}/>
-              <Switch>
-                <Route path="/room/:channel">
-                  <Chat />
-                </Route>
-                <Route path="/">
-                  <Login />
-                </Route>
-              </Switch>
-            </Main>
-          </Container>
+          {
+          !user ? 
+          <Login setUser={setUser}/>
+          : 
+            <Container>
+              <Header signOut={signOut} user={user}/>
+              <Main>
+                <Sidebar rooms={rooms}/>
+                <Switch>
+                  <Route path="/room/:channelId">
+                    <Chat user={user}/>
+                  </Route>
+                  <Route path="/">
+                    Select or Create Channel
+                  </Route>
+                </Switch>
+              </Main>
+            </Container>
+          }
         </Router>
       </ThemeProvider>
     </div>
@@ -64,7 +78,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: grid;
-  grid-template-rows: 38px auto;
+  grid-template-rows: 38px minmax(0, 1fr);
 `
 
 const Main = styled.div`

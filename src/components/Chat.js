@@ -5,8 +5,11 @@ import {sidebarChannelsData} from "../data/SidebarData"
 import {useTheme, useThemeUpdate} from "../ThemeContext"
 import ChatInput from './ChatInput'
 import ChatMessage from './ChatMessage'
+import db from "../firebase"
+import firebase from "firebase"
+import { useParams } from "react-router-dom"
 
-function Chat() {
+function Chat({user}) {
   const darkTheme = useTheme()
 
   const themeStyle = {
@@ -18,11 +21,58 @@ function Chat() {
     backgroundColor: darkTheme ? "red" : "yellow",
   }
 
+  let{channelId} = useParams()
+  const [channel, setChannel] = useState()
+  const [messages, setMessages] = useState()
+
+  const getMessages = () => {
+    db.collection('rooms')
+    .doc(channelId)
+    .collection('messages')
+    .orderBy('timestamp', 'asc')
+    .onSnapshot((snapshot) =>{
+      let messages = snapshot.docs.map((doc) => doc.data())
+      setMessages(messages)
+    })
+  }
+
+  const getChannel = () => {
+    db.collection('rooms')
+    .doc(channelId)
+    .onSnapshot((snapshot) => {
+      setChannel(snapshot.data())
+    })
+  }
+
+ 
+
+  useEffect(() => {
+    getChannel()
+    getMessages()
+
+    // return () => {
+    //   getChannel()  
+    // }
+  }, [channelId])
+
+  const sendMessage = (text) => {
+    if(channelId){
+      let payload = {
+        text: text,
+        user: user.name,
+        userImage: user.photo,
+        timestamp: firebase.firestore.Timestamp.now(),
+      }
+      db.collection('rooms').doc(channelId).collection('messages').add(payload)
+      console.log(payload)
+    }
+  }
+
   return (
     <Container style={themeStyle}>
       <Header>
         <Channel>
-          <ChannelName>claver</ChannelName>
+          <ChannelName># {channel && channel.name}</ChannelName>
           <ChannelInfo style={themeStyle}>
             Company-wide announcements and work-based matters
           </ChannelInfo>
@@ -33,14 +83,20 @@ function Chat() {
         </ChannelDetails>
       </Header>
       <MaessageContainer>
-        <Message>
-          <ChatMessage/>
-        </Message>
-        <Message>
-          <ChatMessage/>
-        </Message>
+        {
+        messages?.length > 0 &&
+        messages.map((data, index) =>(
+          <Message>
+            <ChatMessage
+              text={data.text}
+              name={data.user}
+              image={data.userImage}
+              timestamp={data.timestamp}
+            />
+          </Message>
+        ))}
       </MaessageContainer>
-      <ChatInput/>
+      <ChatInput sendMessage={sendMessage}/>
     </Container>
   )
 }
@@ -50,6 +106,7 @@ export default Chat
 const Container = styled.div`
   display: grid;
   grid-template-rows: 64px auto min-content;
+  min-height: 0;
 `
 
 const Header = styled.div`
@@ -90,6 +147,7 @@ const MaessageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
+  overflow-y: scroll;
 `
 
 const Message = styled.div`

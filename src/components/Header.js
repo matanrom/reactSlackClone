@@ -4,7 +4,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import {useTheme, useThemeUpdate} from '../ThemeContext'
 
-function Header() {
+function Header({user, signOut}) {
 
   const darkTheme = useTheme()
   const toggleTheme = useThemeUpdate()
@@ -32,10 +32,11 @@ function Header() {
       </ToggleSwitch>
       <UserContainer>
         <Name>
-          Matan
+          {user.name}
         </Name>
-        <UserImage>
-          <img src="https://i.imgur.com/6VBx3io.png"/>
+        <UserImage onClick={signOut}>
+          <img src={user.photo? user.photo : 'https://i.imgur.com/6VBx3io.png'}/>
+          
         </UserImage>
       </UserContainer>
     </Container>
@@ -100,6 +101,7 @@ const UserImage = styled.div`
   height: 28px;
   border: 2px solid white;
   border-radius: 3px;
+  cursor: pointer;
 
   img{
     width: 100%;

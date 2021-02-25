@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import SendIcon from "@material-ui/icons/Send"
 import FlashOnOutlinedIcon from "@material-ui/icons/FlashOnOutlined"
@@ -16,7 +16,7 @@ import AlternateEmailOutlinedIcon from "@material-ui/icons/AlternateEmailOutline
 import SentimentSatisfiedOutlinedIcon from "@material-ui/icons/SentimentSatisfiedOutlined"
 import {useTheme, useThemeUpdate} from "../ThemeContext"
 
-const ChatInput = () => {
+const ChatInput = ({sendMessage}) => {
 
   const darkTheme = useTheme()
 
@@ -24,12 +24,21 @@ const ChatInput = () => {
     backgroundColor: darkTheme ? "#d3d3d347" : "#2d354e",
   }
 
+  const [input, setInput] = useState("")
+
+  const send =(e) =>{
+    e.preventDefault()
+    if(!input) return
+    sendMessage(input)
+    setInput("")
+  }
+
   return (
     <Container>
       <InputContainer>
         <form>
-          <input type="text" placeholder="Message here..." />
-          <SentButton>
+          <input value={input} onChange={(e) => setInput(e.target.value)} type="text" placeholder="Message here..." />
+          <SentButton onClick={send} type="submit">
             <Send />
           </SentButton>
         </form>
@@ -95,7 +104,7 @@ const InputContainer = styled.div`
   }
 `
 
-const SentButton = styled.div`
+const SentButton = styled.button`
   background: #007a5a;
   border-radius: 2px;
   width: 32px;
