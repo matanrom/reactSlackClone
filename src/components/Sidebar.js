@@ -8,10 +8,12 @@ import Header from './Header';
 import {useTheme, useThemeUpdate} from '../ThemeContext'
 import db from "../firebase";
 import {useHistory} from 'react-router-dom'
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function Sidebar(props) {
 
   const history = useHistory()
+
   const goToChannel = (id) =>{
     if(id){
       history.push(`/room/${id}`)
@@ -31,6 +33,12 @@ function Sidebar(props) {
         name: promptName
       })
     }
+  }
+
+  const deleteChannel = (id) => {
+    if(id){
+      const a = db.collection('rooms').doc(id).delete()
+    }    
   }
 
   return (
@@ -55,21 +63,12 @@ function Sidebar(props) {
             Channels
           </div>
           <AddIcon onClick={addChannel}/>
-          
         </NewChannelContainer>
         <ChannelsList>
-          {/* {sidebarChannelsData.map((channel, i) => (
-              <Channel key={i}>
-                <Link to={`/room/${channel.name}`}>
-                  <p> # {channel.name}</p>
-                </Link>
-              </Channel>
-          ))} */}
           {props.rooms.map((channel) => (
               <Channel onClick={() => goToChannel(channel.id)} key={channel.id}>
-                {/* <Link to={`/room/${channel.name}`}> */}
                   <p> # {channel.name}</p>
-                {/* </Link> */}
+                  <DeleteIcon onClick={() => deleteChannel(channel.id)}/>
               </Channel>
           ))}
         </ChannelsList>
@@ -156,9 +155,11 @@ const Channel = styled.div`
   padding-left: 19px;
   cursor: pointer;
 
-  a{
-    text-decoration: none;
-    color: rgb(188, 171, 188);
+  .MuiSvgIcon-root{
+    margin-right: 12px;
+  }
+  p{
+    flex: 1;
   }
   :hover{
     background: #350D36;

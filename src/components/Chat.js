@@ -36,6 +36,18 @@ function Chat({user}) {
     })
   }
 
+  const sendMessage = (text) => {
+    if(channelId){
+      let payload = {
+        text: text,
+        user: user.name,
+        userImage: user.photo,
+        timestamp: firebase.firestore.Timestamp.now(),
+      }
+      db.collection('rooms').doc(channelId).collection('messages').add(payload)
+    }
+  }
+
   const getChannel = () => {
     db.collection('rooms')
     .doc(channelId)
@@ -55,17 +67,7 @@ function Chat({user}) {
     // }
   }, [channelId])
 
-  const sendMessage = (text) => {
-    if(channelId){
-      let payload = {
-        text: text,
-        user: user.name,
-        userImage: user.photo,
-        timestamp: firebase.firestore.Timestamp.now(),
-      }
-      db.collection('rooms').doc(channelId).collection('messages').add(payload)
-    }
-  }
+  
 
   return (
     <Container style={themeStyle}>
